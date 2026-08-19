@@ -76,7 +76,7 @@ Your public profile can display:
 | Tailwind CSS | UI & Styling |
 | Node.js | Backend |
 | Express.js | REST API |
-| PostgreSQL | Database |
+| MongoDB | Database |
 | Supabase | Database & Authentication |
 | Recharts | Data Visualization |
 | Git & GitHub | Version Control |
@@ -88,8 +88,8 @@ Your public profile can display:
 
 ```text
                     ┌──────────────────┐
-                    │     Skillfolio   │
-                    │   React Frontend │
+                    │    Skillfolio    │
+                    │  React Frontend  │
                     └────────┬─────────┘
                              │
                              ▼
@@ -101,5 +101,5 @@ Your public profile can display:
                              ▼
                     ┌──────────────────┐
                     │    Supabase      │
-                    │ PostgreSQL + Auth│
+                    │  MongoDB + Auth  │
                     └──────────────────┘
