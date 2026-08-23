@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
+import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
 
 const UserSchema = new mongoose.Schema(
   {
@@ -24,20 +24,19 @@ const UserSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      // Not required if the user signs up via GitHub OAuth
       required: function () {
         return !this.githubId;
       },
       minlength: [8, 'Password must be at least 8 characters'],
-      select: false, // never return password by default in queries
+      select: false,
     },
     githubId: {
       type: String,
       unique: true,
-      sparse: true, // allows multiple docs with no githubId
+      sparse: true,
     },
 
-    // --- Profile fields (for public profile page: /u/username) ---
+    // --- Profile fields ---
     displayName: {
       type: String,
       trim: true,
@@ -75,13 +74,11 @@ const UserSchema = new mongoose.Schema(
       default: '',
     },
 
-    // --- Profile visibility & metadata ---
     isPublic: {
       type: Boolean,
-      default: true, // controls whether /u/username is visible to others
+      default: true,
     },
 
-    // --- References ---
     projects: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -90,11 +87,10 @@ const UserSchema = new mongoose.Schema(
     ],
   },
   {
-    timestamps: true, // adds createdAt, updatedAt
+    timestamps: true,
   }
 );
 
-// --- Middleware: hash password before saving ---
 UserSchema.pre('save', async function (next) {
   if (!this.isModified('password') || !this.password) return next();
 
@@ -103,12 +99,10 @@ UserSchema.pre('save', async function (next) {
   next();
 });
 
-// --- Instance method: compare entered password with hashed password ---
 UserSchema.methods.comparePassword = async function (enteredPassword) {
   return bcrypt.compare(enteredPassword, this.password);
 };
 
-// --- Virtual: skill count (computed from linked projects at query time, if populated) ---
 UserSchema.virtual('projectCount').get(function () {
   return this.projects ? this.projects.length : 0;
 });
@@ -116,4 +110,6 @@ UserSchema.virtual('projectCount').get(function () {
 UserSchema.set('toJSON', { virtuals: true });
 UserSchema.set('toObject', { virtuals: true });
 
-module.exports = mongoose.model('User', UserSchema);
+const User = mongoose.model('User', UserSchema);
+
+export default User;
