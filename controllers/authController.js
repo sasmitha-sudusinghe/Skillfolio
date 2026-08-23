@@ -36,6 +36,7 @@ export const signup = async (req, res) => {
       },
     });
   } catch (error) {
+    console.error('SIGNUP ERROR:', error); // TEMP: remove once debugged
     if (error.name === 'ValidationError') {
       const messages = Object.values(error.errors).map((e) => e.message);
       return res.status(400).json({ message: messages.join(', ') });
@@ -80,6 +81,7 @@ export const login = async (req, res) => {
       },
     });
   } catch (error) {
+    console.error('LOGIN ERROR:', error); // TEMP: remove once debugged
     res.status(500).json({ message: 'Something went wrong during login' });
   }
 };
@@ -97,6 +99,7 @@ export const getMe = async (req, res) => {
 
     res.status(200).json({ user });
   } catch (error) {
+    console.error('GET ME ERROR:', error); // TEMP: remove once debugged
     res.status(500).json({ message: 'Could not fetch profile' });
   }
 };
@@ -131,6 +134,7 @@ export const updateMe = async (req, res) => {
 
     res.status(200).json({ user });
   } catch (error) {
+    console.error('UPDATE ME ERROR:', error); // TEMP: remove once debugged
     if (error.name === 'ValidationError') {
       const messages = Object.values(error.errors).map((e) => e.message);
       return res.status(400).json({ message: messages.join(', ') });

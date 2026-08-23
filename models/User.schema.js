@@ -91,12 +91,13 @@ const UserSchema = new mongoose.Schema(
   }
 );
 
-UserSchema.pre('save', async function (next) {
-  if (!this.isModified('password') || !this.password) return next();
+// FIXED: async pre-save hooks in modern Mongoose don't receive a `next`
+// callback - just omit it and let the promise resolve on its own.
+UserSchema.pre('save', async function () {
+  if (!this.isModified('password') || !this.password) return;
 
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
-  next();
 });
 
 UserSchema.methods.comparePassword = async function (enteredPassword) {
